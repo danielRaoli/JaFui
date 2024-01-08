@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ViagemApi.Data.Dtos;
+using ViagemApi.Model;
 
 namespace ViagemApi.Mappings
 {
@@ -8,8 +9,9 @@ namespace ViagemApi.Mappings
 
         public Profiles()
         {
-            CreateMap<DepoimentoDto, DepoimentoDto>();
+            CreateMap<DepoimentoDto, Depoimento>().ReverseMap();
 
+            CreateMap<DestinoDto, Destino>().ReverseMap();
         }
     }
 }

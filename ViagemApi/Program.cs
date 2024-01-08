@@ -1,6 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using ViagemApi.Contracts;
+using ViagemApi.Data;
+using ViagemApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
+var connString = builder.Configuration.GetConnectionString("connString");
 // Add services to the container.
+builder.Services.AddDbContext<ApiContext>(opts => opts.UseMySql(connString, ServerVersion.AutoDetect(connString)));
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<IDepoimentoService, DepoimentoService>();
+builder.Services.AddScoped<IDestinoService, DestinoService>();  
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

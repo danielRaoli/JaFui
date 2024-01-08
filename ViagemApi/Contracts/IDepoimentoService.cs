@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using ViagemApi.Data.Dtos;
+using ViagemApi.ViewModels;
 
 namespace ViagemApi.Contracts;
 
 public interface IDepoimentoService
 {
-    Task Share(DepoimentoDto depoimento);
+    Task Share(ViewCreateDepoimento depoimento);
 
-    Task<IEnumerable<DepoimentoDto>> GetAll(int skip = 0, int take = 10);
+    Task<IEnumerable<DepoimentoDto>> GetAll(int skip, int take);
 
-    Task<DepoimentoDto> GetByName(string name);
+   Task<DepoimentoDto> GetById(int id);
 
+    Task<IEnumerable<DepoimentoDto>> LastThree();
     Task Delete(int id);
 }
