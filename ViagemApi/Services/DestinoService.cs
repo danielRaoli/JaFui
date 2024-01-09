@@ -4,6 +4,7 @@ using ViagemApi.Contracts;
 using ViagemApi.Data;
 using ViagemApi.Data.Dtos;
 using ViagemApi.Model;
+using ViagemApi.ViewModels;
 
 namespace ViagemApi.Services
 {
@@ -19,8 +20,22 @@ namespace ViagemApi.Services
             _mapper = mapper;
         }
 
-        public async Task CreateDestino(Destino destino)
+        public async Task CreateDestino(ViewCreateDestino createDestino)
         {
+            string fotoPerfil = FotosService.GerarCaminho(createDestino.FotoPerfil);
+            string fotoDetalhes = FotosService.GerarCaminho(createDestino.FotoDetalhes);
+
+            string descricao = createDestino.Descricao ?? await GeradorDeDescricao.GerarDescricao(createDestino.Name);
+
+            Destino destino = new()
+            {
+                Name = createDestino.Name,
+                FotoPerfil = fotoPerfil,
+                FotoDetalhes = fotoDetalhes,
+                Descricao = descricao,
+                Meta = createDestino.Meta
+            };
+
             _context.Add(destino);
             await _context.SaveChangesAsync();
         }
@@ -40,7 +55,7 @@ namespace ViagemApi.Services
 
         }
 
-        public async Task<DestinoDto> GetDestino(string name)
+        public async Task<DestinoDto> GetDestinoByName(string name)
         {
             var destinoDb = await _context.Destinos.FirstOrDefaultAsync(d => d.Name.ToLower() == name.ToLower());
 
@@ -54,7 +69,17 @@ namespace ViagemApi.Services
             return destinoDto;
         }
 
-        public async Task<IEnumerable<DestinoDto>> GetDestinos()
+        public async Task<DestinoDto> GetDestinoById(int id)
+        {
+
+            var destinoDB = _context.Destinos.FirstOrDefault(d => d.Id == id) ?? throw new ArgumentNullException(" Id Not Found");
+
+            var destinoDto = _mapper.Map<DestinoDto>(destinoDB);
+            return destinoDto;
+
+        }
+
+        public async Task<IEnumerable<ResumoDestinoDto>> GetAll()
         {
             var listDestinos = await _context.Destinos.ToListAsync();
 
@@ -63,7 +88,7 @@ namespace ViagemApi.Services
                 throw new ArgumentNullException("The list is empty");
             }
 
-            var listDestinosDto = _mapper.Map<List<DestinoDto>>(listDestinos);
+            var listDestinosDto = _mapper.Map<List<ResumoDestinoDto>>(listDestinos);
 
             return listDestinosDto;
         }

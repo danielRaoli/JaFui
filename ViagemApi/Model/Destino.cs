@@ -5,8 +5,12 @@
         public int Id { get; set; }
         public string? Name { get; set; }
 
-        public string? Foto { get; set; }
+        public string? FotoPerfil { get; set; }
 
-        public double Price { get; set; }
+        public string? FotoDetalhes { get; set; }
+
+        public string? Descricao { get; set; }
+
+        public string? Meta { get; set; }
     }
 }

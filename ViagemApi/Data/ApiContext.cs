@@ -20,9 +20,11 @@ namespace ViagemApi.Data
 
             modelBuilder.Entity<Destino>().Property(s => s.Name).HasMaxLength(100);
 
-            modelBuilder.Entity<Destino>().Property(s => s.Foto).HasMaxLength(300);
+            modelBuilder.Entity<Destino>().Property(s => s.FotoPerfil).HasMaxLength(300).IsRequired();
 
-            modelBuilder.Entity<Destino>().Property(s => s.Price).IsRequired();
+            modelBuilder.Entity<Destino>().Property(s => s.FotoDetalhes).HasMaxLength(300).IsRequired();
+
+            modelBuilder.Entity<Destino>().Property(s => s.Meta).IsRequired();
 
         }
         public DbSet<Depoimento> Depoimentos { get; set; }

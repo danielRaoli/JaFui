@@ -22,27 +22,21 @@ public class DestinosController : ControllerBase
     public async Task<IActionResult> Post([FromForm] ViewCreateDestino createDestino)
     {
 
-        var path = Path.Combine("Storage", createDestino.Foto.FileName);
 
-        using Stream file = new FileStream(path, FileMode.Create);
 
-        createDestino.Foto.CopyTo(file);
+        await _service.CreateDestino(createDestino);
 
-        Destino destino = new() { Name = createDestino.Name, Price = createDestino.Price, Foto = path };
-
-        await _service.CreateDestino(destino);
-
-        return Ok(destino);
+        return CreatedAtAction(nameof(Get), new { name = createDestino.Name });
 
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<DestinoDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<ResumoDestinoDto>>> GetAll()
     {
         try
         {
 
-            var listDestinos = await _service.GetDestinos();
+            var listDestinos = await _service.GetAll();
             return Ok(listDestinos);
 
         }
@@ -60,7 +54,24 @@ public class DestinosController : ControllerBase
         try
         {
 
-            var destino = await _service.GetDestino(name);
+            var destino = await _service.GetDestinoByName(name);
+            return Ok(destino);
+
+        }
+        catch (ArgumentNullException ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<ActionResult<DestinoDto>> Get([FromRoute] int id)
+    {
+        try
+        {
+
+            var destino = await _service.GetDestinoById(id);
             return Ok(destino);
 
         }

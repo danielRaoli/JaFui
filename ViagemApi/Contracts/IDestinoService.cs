@@ -6,11 +6,13 @@ namespace ViagemApi.Contracts
 {
     public interface IDestinoService
     {
-        public  Task CreateDestino(Destino destino);
+        public Task CreateDestino(ViewCreateDestino destinoCreate);
 
-        public Task<IEnumerable<DestinoDto>> GetDestinos();
+        public Task<IEnumerable<ResumoDestinoDto>> GetAll();
 
-        public Task<DestinoDto> GetDestino(string name);
+        public Task<DestinoDto> GetDestinoByName(string name);
+
+        public Task<DestinoDto> GetDestinoById(int id);
 
         public Task Delete(int id);
 
